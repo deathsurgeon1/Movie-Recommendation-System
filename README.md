@@ -1,35 +1,70 @@
-# Movie-Recommendation-System
+# Getting Started with Create React App
 
-This project focuses on finding out the top five best picks similar to the recently watched movies. This is a content based recommendation system where the model suggest movies based on the watched content (like if someone is watching thriller then suggesting thriller movies).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-<p align='center'>
-<img src='https://github.com/Aryan-2003/Movie-Recommendation-System/blob/main/sample_img.png' height=500 width=1000>
-</p>
+## Available Scripts
 
-**`Technology and Library Used`**
-  * Python
-  * Pandas
-  * NumPy
-  * Scikit-Learn
-  * NLTK
-  * Streamlit
-  
-Steps followed to build the project : 
+In the project directory, you can run:
 
-1. Dataset Downloaded from Kaggle , `LINK` : https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata and this contains two csv files `tmdb_5000_movies.csv` & `tmdb_5000_credits.csv`
+### `npm start`
 
-2. Explored both the csv files and merged them based on the **title** column.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-3. Done feature engineering where we kept only those features which will help us and removed all those which we generally not consider while recommending a movie. Then merged all such words which play an important role while recommending a movie into a single feature **tags** and removed others.
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-4. Perfomed some basic `Natural Language Processing` tasks like lowercasing and stemming. Then as computer can't deal with text so converted into vectors with the help of **CountVectorizer** function present in the **scikit-learn**.
+### `npm test`
 
-5. Finally to find out the similarities between each vector, used `cosine_similarity` and according to that find out the five most similar movies.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-6. Saved the movies list, similarity model into **pickle** file and load those file in the **streamlit** app which finally got deployed on HEROKU.
+### `npm run build`
 
-`Project Link` : https://movie-recommend-syt.herokuapp.com/
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## THANK YOU
-  
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
