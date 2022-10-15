@@ -1,54 +1,49 @@
-import streamlit as st
+from flask import Flask, request
 import pickle
-import pandas as pd
 import requests
+from flask_cors import CORS, cross_origin
+from sklearn.metrics.pairwise import cosine_similarity
 
-def fetch_poster(movie_id):
-    response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=6c4a71563da95e15d06ef74df1422300'.format(movie_id))
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+with open('save_model_with_movie_id', 'rb') as file:
+    model = pickle.load(file)
+
+input_embeddings = []
+for item in model['embeddings']:
+    input_embeddings.append(item.tolist())
+
+similarity_scores = cosine_similarity(input_embeddings)
+
+
+def get_poster_url(movie_id):
+    response = requests.get(
+        'https://api.themoviedb.org/3/movie/{}?api_key=6c4a71563da95e15d06ef74df1422300'.format(movie_id))
     data = response.json()
     return "https://image.tmdb.org/t/p/original" + data['poster_path']
 
-def recommend(movie):
-    movie_index = movies[movies['title'] == movie].index[0]
-    distances = similarity[movie_index]
-    movies_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
-    recommended_movies = []
-    recommended_movies_poster=[]
-    for i in movies_list:
-        movie_id = movies.iloc[i[0]].movie_id
-        recommended_movies.append(movies.iloc[i[0]].title)
-        # fetch poster from API
-        recommended_movies_poster.append(fetch_poster(movie_id))
-    return recommended_movies,recommended_movies_poster
 
-movies_dict = pickle.load(open('movie_dict.pkl','rb'))
-movies = pd.DataFrame(movies_dict)
+@app.route("/")
+@cross_origin()
+def run():
+    input_movie = request.args.get("movie_name").lower()
+    available_movies = model['title'].map(lambda x: x.lower()).tolist()
+    result = []
 
-similarity = pickle.load(open('similarity.pkl','rb'))
+    if input_movie in available_movies:
+        input_movie_index = available_movies.index(input_movie)
+        sorted_similarity_indices = (-similarity_scores[input_movie_index]).argsort()[:6]
+        for ix in sorted_similarity_indices:
+            if ix == input_movie_index:
+                continue
+            result.append({
+                "title": model['title'][ix],
+                "poster_url": get_poster_url(model['movie_id'][ix])
+            })
+    return result
 
-st.title('Movie Recommender System')
 
-selected_movie_name = st.selectbox(
-    'Select a movie',
-    movies['title'].values
-)
-
-if st.button('Recommend'):
-    recommended_movie_names,recommended_movie_posters = recommend(selected_movie_name)
-    col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        st.text(recommended_movie_names[0])
-        st.image(recommended_movie_posters[0])
-    with col2:
-        st.text(recommended_movie_names[1])
-        st.image(recommended_movie_posters[1])
-
-    with col3:
-        st.text(recommended_movie_names[2])
-        st.image(recommended_movie_posters[2])
-    with col4:
-        st.text(recommended_movie_names[3])
-        st.image(recommended_movie_posters[3])
-    with col5:
-        st.text(recommended_movie_names[4])
-        st.image(recommended_movie_posters[4])
+if __name__ == "__main__":
+    app.run()
